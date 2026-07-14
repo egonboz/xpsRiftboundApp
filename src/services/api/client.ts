@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE
+const BASE_URL = '/api'
 
 export async function apiGet<T>(path: string): Promise<T> {
   const url = `${BASE_URL}${path}`
