@@ -12,7 +12,7 @@ import { TRACKED_PLAYERS } from '@/config/trackedPlayers'
 
 export function DashboardPage() {
   const { tournamentId, setTournamentId } = useTournamentSearch()
-  const { data, isLoading, error } = useDashboard(tournamentId)
+  const { data, isLoading, error, waitingEventName } = useDashboard(tournamentId)
   const [inputValue, setInputValue] = useState(tournamentId ?? '')
 
   if (!tournamentId) {
@@ -50,6 +50,30 @@ export function DashboardPage() {
                 Load
               </button>
             </form>
+          </div>
+        </PageContainer>
+      </>
+    )
+  }
+
+  if (waitingEventName) {
+    return (
+      <>
+        <Header title="Riftbound Tracker" subtitle={waitingEventName} />
+        <PageContainer>
+          <div className="glass flex flex-col items-center gap-3 rounded-3xl p-8 text-center">
+            <div className="text-4xl">⏳</div>
+            <h3 className="text-lg font-semibold">Waiting for First Round</h3>
+            <p className="text-sm text-gray-400">
+              The event has not started yet. Standings will appear once the first round is generated.
+            </p>
+            <button
+              type="button"
+              onClick={() => setTournamentId('')}
+              className="rounded-xl bg-surface-lighter px-4 py-2 text-sm font-medium text-gray-400 transition-colors hover:text-gray-200"
+            >
+              Change ID
+            </button>
           </div>
         </PageContainer>
       </>
