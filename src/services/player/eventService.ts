@@ -32,14 +32,16 @@ export async function resolveEventDetails(eventId: string): Promise<EventDetails
   const rounds = event.tournament_phases.flatMap((p) => p.rounds)
   const generated = rounds.filter((r) => r.standings_status === 'GENERATED')
 
-  if (generated.length === 0) {
-    throw new Error('No rounds with generated standings found for this event')
+  if (generated.length > 0) {
+    const latest = generated.reduce((max, r) => (r.round_number > max.round_number ? r : max))
+    return {
+      roundId: String(latest.id),
+      eventName: event.name,
+    }
   }
 
-  const latest = generated.reduce((max, r) => (r.round_number > max.round_number ? r : max))
-
   return {
-    roundId: String(latest.id),
+    roundId: eventId,
     eventName: event.name,
   }
 }

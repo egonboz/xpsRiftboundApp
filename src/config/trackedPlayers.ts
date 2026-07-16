@@ -1,6 +1,6 @@
 export const TRACKED_PLAYERS = [
   'XPS Enriqueso',
-  'XPS angelui',
+  'XPS Gelui',
   'XPS LoneZoeBall',
-  'XPS Pinilla',
+  'XPS PiPana',
 ]
