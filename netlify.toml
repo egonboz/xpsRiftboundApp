@@ -2,3 +2,8 @@
   from = "/api/*"
   to = "https://api.cloudflare.riftbound.uvsgames.com/hydraproxy/api/v2/:splat"
   status = 200
+
+[[redirects]]
+  from = "/pairings-api/*"
+  to = "https://eloshowdown.com/riftbound/api/tracker/:splat"
+  status = 200

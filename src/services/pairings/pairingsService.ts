@@ -1,9 +1,7 @@
 import type { PairingsResponse } from '@/services/pairings/types'
 
-const BASE_URL = 'https://eloshowdown.com/riftbound/api/tracker'
-
 export async function fetchPairingsByRound(roundId: string): Promise<PairingsResponse> {
-  const url = `${BASE_URL}/round/${roundId}/combined/?pairings=1&standings=0`
+  const url = `/pairings-api/round/${roundId}/combined/?pairings=1&standings=0`
   const response = await fetch(url)
 
   if (!response.ok) {
