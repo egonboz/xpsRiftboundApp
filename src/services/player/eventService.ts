@@ -49,16 +49,22 @@ export async function resolveEventDetails(eventId: string): Promise<EventDetails
   const event = await fetchEvent(eventId)
 
   const rounds = event.tournament_phases.flatMap((p) => p.rounds)
-  const generated = rounds.filter((r) => r.standings_status === 'GENERATED')
+  const withStandings = rounds.filter((r) => r.standings_status === 'GENERATED')
+  const withPairings = rounds.filter((r) => r.pairings_status === 'GENERATED')
 
-  if (generated.length === 0) {
+  const latestRound =
+    withStandings.length > 0
+      ? withStandings.reduce((max, r) => (r.round_number > max.round_number ? r : max))
+      : withPairings.length > 0
+        ? withPairings.reduce((max, r) => (r.round_number > max.round_number ? r : max))
+        : null
+
+  if (!latestRound) {
     throw new EventNotStartedError(event.name)
   }
 
-  const latest = generated.reduce((max, r) => (r.round_number > max.round_number ? r : max))
-
   return {
-    roundId: String(latest.id),
+    roundId: String(latestRound.id),
     eventName: event.name,
   }
 }
