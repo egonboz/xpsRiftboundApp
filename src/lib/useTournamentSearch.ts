@@ -1,17 +1,14 @@
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useParams } from 'react-router-dom'
 
 export function useTournamentSearch() {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
+  const { eventId } = useParams<{ eventId?: string }>()
 
-  const tournamentId = searchParams.get('tournament')
-
-  const setTournamentId = (id: string) => {
-    setSearchParams({ tournament: id })
-  }
+  const tournamentId = searchParams.get('tournament') || eventId || null
 
   const getTo = (path: string) => {
     return tournamentId ? `${path}?tournament=${tournamentId}` : path
   }
 
-  return { tournamentId, setTournamentId, getTo }
+  return { tournamentId, getTo }
 }

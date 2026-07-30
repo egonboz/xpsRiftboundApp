@@ -3,6 +3,7 @@ import { apiGet } from '@/services/api/client'
 interface ApiEventRound {
   id: number
   round_number: number
+  pairings_status: string
   standings_status: string
   status: string
 }
@@ -20,6 +21,14 @@ interface ApiEventResponse {
 export interface EventDetails {
   roundId: string
   eventName: string
+}
+
+export interface EventRoundInfo {
+  id: number
+  round_number: number
+  pairings_status: string
+  standings_status: string
+  status: string
 }
 
 async function fetchEvent(eventId: string): Promise<ApiEventResponse> {
@@ -52,4 +61,18 @@ export async function resolveEventDetails(eventId: string): Promise<EventDetails
     roundId: String(latest.id),
     eventName: event.name,
   }
+}
+
+export async function resolveEventRounds(eventId: string): Promise<EventRoundInfo[]> {
+  const event = await fetchEvent(eventId)
+
+  return event.tournament_phases.flatMap((p) =>
+    p.rounds.map((r) => ({
+      id: r.id,
+      round_number: r.round_number,
+      pairings_status: r.pairings_status,
+      standings_status: r.standings_status,
+      status: r.status,
+    })),
+  )
 }
