@@ -44,7 +44,7 @@ export function TournamentPage() {
     setSelectedRoundId((prev) => prev ?? String(latest.id))
   }, [roundsWithPairings])
 
-  const { matches: pairings } = usePairings(selectedRoundId)
+  const { matches: pairings, isLoading: pairingsLoading } = usePairings(selectedRoundId)
 
   if (!tournamentId) {
     return (
@@ -158,6 +158,7 @@ export function TournamentPage() {
               data={data}
               viewMode={viewMode}
               pairings={pairings}
+              pairingsLoading={pairingsLoading}
               rounds={roundsWithPairings}
               selectedRoundId={selectedRoundId}
               onSelectRound={setSelectedRoundId}
@@ -173,6 +174,7 @@ function DashboardContent({
   data,
   viewMode,
   pairings,
+  pairingsLoading,
   rounds,
   selectedRoundId,
   onSelectRound,
@@ -180,6 +182,7 @@ function DashboardContent({
   data: DashboardData
   viewMode: ViewMode
   pairings: Match[]
+  pairingsLoading: boolean
   rounds: EventRoundInfo[]
   selectedRoundId: string | null
   onSelectRound: (id: string) => void
@@ -232,7 +235,7 @@ function DashboardContent({
         />
       )}
 
-      <PairingsSection matches={displayPairings} />
+      <PairingsSection matches={displayPairings} isLoading={pairingsLoading} />
 
       {filtered.length > 0 && (
         <>

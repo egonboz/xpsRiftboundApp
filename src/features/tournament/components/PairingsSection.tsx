@@ -1,12 +1,38 @@
 import type { Match } from '@/services/pairings/types'
-import { SectionCard } from '@/components/ui/shared'
+import { SectionCard, Skeleton } from '@/components/ui/shared'
 import { cn } from '@/lib/cn'
 
 interface PairingsSectionProps {
   matches: Match[]
+  isLoading?: boolean
 }
 
-export function PairingsSection({ matches }: PairingsSectionProps) {
+export function PairingsSection({ matches, isLoading }: PairingsSectionProps) {
+  if (isLoading) {
+    return (
+      <SectionCard title="Pairings">
+        <div className="space-y-2">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-3 rounded-xl bg-surface-lighter/50 px-4 py-3"
+            >
+              <div className="flex shrink-0 flex-col items-center gap-0.5">
+                <Skeleton className="h-3 w-8" />
+                <Skeleton className="h-7 w-7 rounded-lg" />
+              </div>
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-4 w-24" />
+              </div>
+              <Skeleton className="h-6 w-14 rounded-md" />
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+    )
+  }
+
   if (matches.length === 0) {
     return (
       <SectionCard title="Pairings">
