@@ -17,11 +17,6 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '/hydraproxy/api/v2'),
       },
-      '/pairings-api': {
-        target: 'https://eloshowdown.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/pairings-api/, '/riftbound/api/tracker'),
-      },
     },
   },
 })
