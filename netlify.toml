@@ -7,3 +7,8 @@
   from = "/pairings-api/*"
   to = "https://eloshowdown.com/riftbound/api/tracker/:splat"
   status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
