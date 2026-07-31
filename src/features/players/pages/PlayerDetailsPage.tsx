@@ -10,15 +10,17 @@ export function PlayerDetailsPage() {
   const { tournamentId, getTo } = useTournamentSearch()
   const { player, allPlayers, isLoading, error } = usePlayer(id ?? '', tournamentId)
 
+  const backTo = tournamentId ? `/tournament/${tournamentId}` : getTo('/')
+
   if (error) {
     return (
       <PageContainer>
         <Link
-          to={getTo('/')}
+          to={backTo}
           className="mb-6 inline-flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-gray-200"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Dashboard
+          Back to Tournament
         </Link>
         <div className="glass flex flex-col items-center gap-3 rounded-3xl p-8 text-center">
           <div className="text-4xl">😔</div>
@@ -35,18 +37,18 @@ export function PlayerDetailsPage() {
   }
 
   if (isLoading) {
-    return <PlayerSkeleton />
+    return <PlayerSkeleton backTo={backTo} />
   }
 
   if (!player) {
     return (
       <PageContainer>
         <Link
-          to={getTo('/')}
+          to={backTo}
           className="mb-6 inline-flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-gray-200"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Dashboard
+          Back to Tournament
         </Link>
         <div className="glass flex flex-col items-center gap-3 rounded-3xl p-8 text-center">
           <div className="text-4xl">🔍</div>
@@ -65,11 +67,11 @@ export function PlayerDetailsPage() {
   return (
     <PageContainer>
       <Link
-        to={getTo('/')}
+        to={backTo}
         className="mb-4 inline-flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-gray-200"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to Dashboard
+        Back to Tournament
       </Link>
 
       <div className="space-y-4">
@@ -112,14 +114,12 @@ export function PlayerDetailsPage() {
   )
 }
 
-function PlayerSkeleton() {
-  const { getTo } = useTournamentSearch()
-
+function PlayerSkeleton({ backTo }: { backTo: string }) {
   return (
     <PageContainer>
-      <Link to={getTo('/')} className="mb-6 inline-flex items-center gap-2 text-sm text-gray-400">
+      <Link to={backTo} className="mb-6 inline-flex items-center gap-2 text-sm text-gray-400">
         <ArrowLeft className="h-4 w-4" />
-        Back to Dashboard
+        Back to Tournament
       </Link>
       <div className="space-y-4">
         <div className="flex flex-col items-center gap-3">
