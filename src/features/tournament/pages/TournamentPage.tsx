@@ -14,6 +14,7 @@ import { TRACKED_PLAYERS } from '@/config/trackedPlayers'
 import { useEventRounds } from '@/hooks/useEventRounds'
 import { usePairings } from '@/hooks/usePairings'
 import { cn } from '@/lib/cn'
+import { setLastTournament } from '@/lib/lastTournament'
 import type { DashboardData } from '@/entities/player/types'
 import type { Match } from '@/services/pairings/types'
 import type { EventRoundInfo } from '@/services/player/eventService'
@@ -45,6 +46,12 @@ export function TournamentPage() {
   }, [roundsWithPairings])
 
   const { matches: pairings, isLoading: pairingsLoading } = usePairings(selectedRoundId)
+
+  useEffect(() => {
+    if (tournamentId) {
+      setLastTournament({ id: tournamentId })
+    }
+  }, [tournamentId])
 
   if (!tournamentId) {
     return (

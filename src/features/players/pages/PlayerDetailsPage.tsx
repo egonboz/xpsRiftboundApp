@@ -1,9 +1,11 @@
 import { useParams, Link } from 'react-router-dom'
+import { useEffect } from 'react'
 import { ArrowLeft, Medal, TrendingUp, Target, Trophy, Award } from 'lucide-react'
 import { PageContainer, Skeleton, StatCard, StatusBadge, SectionCard } from '@/components/ui/shared'
 import { usePlayer } from '@/features/players/hooks/usePlayer'
 import { formatPercentage } from '@/lib/utils'
 import { useTournamentSearch } from '@/lib/useTournamentSearch'
+import { setLastPlayer } from '@/lib/lastPlayer'
 
 export function PlayerDetailsPage() {
   const { id } = useParams<{ id: string }>()
@@ -11,6 +13,16 @@ export function PlayerDetailsPage() {
   const { player, allPlayers, isLoading, error } = usePlayer(id ?? '', tournamentId)
 
   const backTo = tournamentId ? `/tournament/${tournamentId}` : getTo('/')
+
+  useEffect(() => {
+    if (player && tournamentId) {
+      setLastPlayer({
+        id: player.id,
+        name: player.displayName,
+        tournamentId,
+      })
+    }
+  }, [player, tournamentId])
 
   if (error) {
     return (
