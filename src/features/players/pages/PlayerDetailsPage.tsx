@@ -6,6 +6,7 @@ import { usePlayer } from '@/features/players/hooks/usePlayer'
 import { formatPercentage } from '@/lib/utils'
 import { useTournamentSearch } from '@/lib/useTournamentSearch'
 import { setLastPlayer } from '@/lib/lastPlayer'
+import { cn } from '@/lib/cn'
 
 export function PlayerDetailsPage() {
   const { id } = useParams<{ id: string }>()
@@ -120,7 +121,18 @@ export function PlayerDetailsPage() {
 
         <CurrentTournamentSection player={player} />
 
-        <DeckComparisonSection player={player} allPlayers={allPlayers} />
+        {player.deckName && player.deckName !== 'Unknown' ? (
+          <>
+            <DeckComparisonSection player={player} allPlayers={allPlayers} />
+            <DeckRankingSection player={player} allPlayers={allPlayers} />
+          </>
+        ) : (
+          <SectionCard title="Deck">
+            <p className="py-4 text-center text-sm text-gray-500">
+              No deck information available for this tournament.
+            </p>
+          </SectionCard>
+        )}
       </div>
     </PageContainer>
   )
@@ -254,6 +266,69 @@ function DeckComparisonSection({
           icon={<TrendingUp className="h-5 w-5" />}
           variant="blue"
         />
+      </div>
+    </SectionCard>
+  )
+}
+
+function DeckRankingSection({
+  player,
+  allPlayers,
+}: {
+  player: NonNullable<ReturnType<typeof usePlayer>['player']>
+  allPlayers: NonNullable<ReturnType<typeof usePlayer>['allPlayers']>
+}) {
+  const { getTo } = useTournamentSearch()
+
+  const sameDeck = [...allPlayers]
+    .filter((p) => p.deckName === player.deckName)
+    .sort((a, b) => a.currentRank - b.currentRank)
+
+  if (sameDeck.length <= 1) return null
+
+  return (
+    <SectionCard title={`${player.deckName} Ranking`}>
+      <div className="space-y-1">
+        {sameDeck.map((p) => {
+          const isCurrentPlayer = p.id === player.id
+          return (
+            <Link
+              key={p.id}
+              to={getTo(`/player/${p.id}`)}
+              className={cn(
+                'flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-white/[0.03]',
+                isCurrentPlayer && 'bg-accent-gold/10',
+              )}
+            >
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center text-xs font-bold text-gray-400">
+                {p.currentRank}
+              </span>
+
+              <img
+                src={p.avatar}
+                alt={p.displayName}
+                className="h-7 w-7 rounded-full bg-surface-lighter"
+              />
+
+              <span className={cn('min-w-0 flex-1 truncate text-sm', isCurrentPlayer && 'font-semibold text-accent-gold')}>
+                {p.displayName}
+              </span>
+
+              <div className="flex shrink-0 flex-col items-end gap-0.5">
+                <span className="text-xs tabular-nums">
+                  <span className="font-mono text-green-400">{p.matchesWon}</span>
+                  <span className="text-gray-500">-</span>
+                  <span className="font-mono text-red-400">{p.matchesLost}</span>
+                  <span className="text-gray-500">-</span>
+                  <span className="font-mono text-blue-400">{p.matchesDrawn}</span>
+                </span>
+                <span className="text-[10px] font-semibold text-accent-gold">
+                  {p.matchPoints} pts
+                </span>
+              </div>
+            </Link>
+          )
+        })}
       </div>
     </SectionCard>
   )
