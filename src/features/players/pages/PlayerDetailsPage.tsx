@@ -194,9 +194,9 @@ function CurrentTournamentSection({ player }: { player: NonNullable<ReturnType<t
   return (
     <SectionCard title="Current Tournament">
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-400">Tournament</span>
-          <span className="text-sm font-medium">{player.currentTournament}</span>
+        <div className="flex items-center justify-between gap-3">
+          <span className="shrink-0 text-sm text-gray-400">Tournament</span>
+          <span className="min-w-0 truncate text-right text-sm font-medium">{player.currentTournament}</span>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-400">Rank</span>

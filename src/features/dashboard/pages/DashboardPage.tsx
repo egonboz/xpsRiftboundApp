@@ -30,7 +30,7 @@ export function DashboardPage() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="e.g. 977259"
-              className="flex-1 rounded-xl border border-white/10 bg-surface px-4 py-2.5 text-sm text-white placeholder:text-gray-500 focus:border-accent-gold/40 focus:outline-none"
+              className="flex-1 rounded-xl border border-white/10 bg-surface px-4 py-2.5 text-base text-white placeholder:text-gray-500 focus:border-accent-gold/40 focus:outline-none"
               autoFocus
             />
             <button
