@@ -13,6 +13,7 @@ import { useTournamentSearch } from '@/lib/useTournamentSearch'
 import { TRACKED_PLAYERS } from '@/config/trackedPlayers'
 import { useEventRounds } from '@/hooks/useEventRounds'
 import { usePairings } from '@/hooks/usePairings'
+import { useRegistrations } from '@/hooks/useRegistrations'
 import { cn } from '@/lib/cn'
 import { setLastTournament } from '@/lib/lastTournament'
 import type { DashboardData } from '@/entities/player/types'
@@ -46,6 +47,7 @@ export function TournamentPage() {
   }, [roundsWithPairings])
 
   const { matches: pairings, isLoading: pairingsLoading } = usePairings(selectedRoundId)
+  const { players: registeredPlayers, count: registeredCount } = useRegistrations(tournamentId)
 
   useEffect(() => {
     if (tournamentId) {
@@ -96,6 +98,26 @@ export function TournamentPage() {
               Back to Search
             </button>
           </div>
+
+          {registeredPlayers.length > 0 && (
+            <SectionCard title={`Registered Players (${registeredCount})`} className="mt-4">
+              <div className="space-y-1">
+                {registeredPlayers.map((p) => (
+                  <div
+                    key={p.id}
+                    className="flex items-center gap-3 rounded-xl px-3 py-2"
+                  >
+                    <img
+                      src={p.full_profile_picture_url}
+                      alt={p.best_identifier}
+                      className="h-7 w-7 rounded-full bg-surface-lighter"
+                    />
+                    <span className="text-sm text-gray-200">{p.best_identifier}</span>
+                  </div>
+                ))}
+              </div>
+            </SectionCard>
+          )}
         </PageContainer>
       </>
     )
